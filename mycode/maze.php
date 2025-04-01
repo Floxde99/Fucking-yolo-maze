@@ -186,16 +186,40 @@
   echo '<div class="controls">';
   echo '<form method="POST">';
   echo '<button name="direction" value="up">';
-  echo '<svg viewBox="0 0 100 100"><polygon points="50,10 70,40 60,40 60,80 40,80 40,60 30,40"/></svg>';
+  echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Corps de la flèche -->
+  <polygon points="50,10 70,40 60,40 60,80 40,80 40,40 30,40" fill="#8B4513" stroke="#000" stroke-width="2"/>
+  <!-- Détail style casque de mineur en haut -->
+  <path d="M35,15 Q50,0 65,15 L65,25 Q50,10 35,25 Z" fill="#444" stroke="#000" stroke-width="2"/>
+</svg>
+';
   echo '</button>';
   echo '<button name="direction" value="left">';
-  echo '<svg viewBox="0 0 100 100"><polygon points="10,50 40,30 40,40 80,40 80,60 40,60 40,70"/></svg>';
+  echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Corps de la flèche -->
+  <polygon points="10,50 40,30 40,40 80,40 80,60 40,60 40,70" fill="#8B4513" stroke="#000" stroke-width="2"/>
+  <!-- Détail style casque de mineur sur le côté gauche -->
+  <path d="M15,35 Q0,50 15,65 L25,65 Q10,50 25,35 Z" fill="#444" stroke="#000" stroke-width="2"/>
+</svg>
+';
   echo '</button>';
   echo '<button name="direction" value="down">';
-  echo '<svg viewBox="0 0 100 100"><polygon points="50,90 70,60 60,60 60,20 40,20 40,60 30,60"/></svg>';
+  echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Corps de la flèche -->
+  <polygon points="50,90 70,60 60,60 60,20 40,20 40,60 30,60" fill="#8B4513" stroke="#000" stroke-width="2"/>
+  <!-- Détail style casque de mineur en bas -->
+  <path d="M35,85 Q50,100 65,85 L65,75 Q50,90 35,75 Z" fill="#444" stroke="#000" stroke-width="2"/>
+</svg>
+';
   echo '</button>';
   echo '<button name="direction" value="right">';
-  echo '<svg viewBox="0 0 100 100"><polygon points="90,50 60,30 60,40 20,40 20,60 60,60 60,70"/></svg>';
+  echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Corps de la flèche -->
+  <polygon points="90,50 60,30 60,40 20,40 20,60 60,60 60,70" fill="#8B4513" stroke="#000" stroke-width="2"/>
+  <!-- Détail style casque de mineur sur le côté droit -->
+  <path d="M85,35 Q100,50 85,65 L75,65 Q90,50 75,35 Z" fill="#444" stroke="#000" stroke-width="2"/>
+</svg>
+';
   echo '</button>';
   echo '</form>';
   echo '</div>';
