@@ -1,3 +1,15 @@
+<?php
+session_start(); // Démarrer la session pour stocker les variables de jeu
+// Vérifier si la session est déjà initialisée  
+if (!isset($_SESSION["initialisation"])) {
+  $_SESSION["currentLevel"] = rand(0, 4); // Niveau actuel
+  $_SESSION["position"] = [1, 1]; // Position du joueur
+  $_SESSION["gameOver"] = false; // État du jeu
+  $_SESSION["message"] = ''; // Message d'état du jeu
+}
+
+$_SESSION["initialisation"] = true;
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -11,6 +23,7 @@
 
 <body>
   <?php
+  require_once './function.php'; // Inclure le fichier de fonctions si nécessaire
   // Définition des labyrinthes dans des variables séparées
   $labyrinthe1 = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -66,7 +79,7 @@
     [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
     [1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1],
     [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+    [1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1],
     [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
     [1, 0, 1, 0, 1, 1, 1, 0, 2, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -90,24 +103,57 @@
   // Tableau regroupant tous les labyrinthes
   $labyrinthes = [$labyrinthe1, $labyrinthe2, $labyrinthe3, $labyrinthe4, $labyrinthe5];
 
-  // Configuration initiale
-  $currentLevel = rand(0, count($labyrinthes) - 1);
-  $position = [1, 1];
-  $gameOver = false;
-  $message = '';
-
   // Logique de jeu (par exemple, gestion des déplacements)
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // ... (logique de déplacement)
-  }
+    // Récupération de la direction envoyée par le formulaire
+    $direction = $_POST['direction'];
+
+    // Récupération du niveau actuel et du labyrinthe depuis la session
+    $current = $_SESSION['currentLevel'];
+    // On récupère une copie locale du labyrinthe actuel
+    $labyrinth = $_SESSION['labyrinthes'][$current];
+
+    // Récupération de la position actuelle du joueur (format [x, y])
+    $oldPosition = $_SESSION['position'];
+    $newPosition = $oldPosition; // Initialisation de la nouvelle position avec l'ancienne
+
+    // Calcul de la nouvelle position en fonction de la direction
+    switch ($direction) {
+        case 'up':
+            $newPosition[1]--; // déplacement vers le haut
+            break;
+        case 'down':
+            $newPosition[1]++; // déplacement vers le bas
+            break;
+        case 'left':
+            $newPosition[0]--; // déplacement vers la gauche
+            break;
+        case 'right':
+            $newPosition[0]++; // déplacement vers la droite
+            break;
+    }
+
+    // Vérifier que la nouvelle case n'est pas un mur
+    if ($labyrinth[$newPosition[1]][$newPosition[0]] !== 1) {
+        // Mettre l'ancienne case à 0 (terre)
+        $labyrinth[$oldPosition[1]][$oldPosition[0]] = 0;
+        // Mettre la nouvelle case à 3 (joueur)
+        $labyrinth[$newPosition[1]][$newPosition[0]] = 3;
+        
+        // Mettre à jour la position du joueur et le labyrinthe dans la session
+        $_SESSION['position'] = $newPosition;
+        $_SESSION['labyrinthes'][$current] = $labyrinth;
+    }
+}
 
   // Affichage du jeu
   echo '<h1>Labyrinthe Minier</h1>';
   echo '<div class="game-container">';
   echo '<div class="labyrinthe">';
-  foreach ($labyrinthes[$currentLevel] as $ligne) {
+  $current = $_SESSION["currentLevel"]; // Niveau actuel
+  foreach ($labyrinthes[$current] as $ligne) { //modifier par currentLevel pour changer de labyrinthe
     foreach ($ligne as $case) {
-      echo '<svg viewBox="0 0 100 100">';
+      echo '<svg viewBox="0 0 200 200">';
       switch ($case) {
         case 0: // Chemin
           echo '
